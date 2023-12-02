@@ -1,0 +1,9 @@
+./node_modules
+
+Dockerfile
+
+Dockerfile-mongo
+
+.dockerignore
+
+docker-compose.yml

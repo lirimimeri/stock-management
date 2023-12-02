@@ -1,0 +1,39 @@
+version: '3'
+services:
+
+  # NestJS App Service
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 4000:4000
+    depends_on:
+      - mongo
+    networks:
+      - nesjs-network
+    environment:
+      PORT: 4000
+      DATABASE_URI: mongodb://0.0.0.0:27017
+      DATABASE_NAME: stock-management
+    env_file:
+      - .env
+
+  # MongoDB Service
+  mongo:
+    container_name: mongo
+    build: 
+      context: .
+      dockerfile: Dockerfile-mongo
+    # volumes:
+    # - ./data:/data/db
+    networks:
+      - nesjs-network
+    ports:
+    - '27017:27017'
+
+
+networks:
+    nesjs-network:
+      driver: bridge
+

@@ -1,0 +1,4 @@
+# Use the official MongoDB image as a base image
+FROM mongo:6
+
+RUN mongod --bind_ip=0.0.0.0
