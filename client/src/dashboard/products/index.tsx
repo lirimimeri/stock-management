@@ -1,15 +1,15 @@
-// import { useQuery } from 'react-query';
-// import { getTodos } from './api';
+import { useQuery } from 'react-query';
+import { getProducts } from './api';
 
 export const Products = () => {
-  // const { data } = useQuery('todo', getTodos);
+  const { data } = useQuery('products', getProducts);
   return (
     <div className="container mx-auto p-4 h-full">
       <form>
         <div className="grid gap-6 mb-6 md:grid-cols-2">
           <div>
-            <label htmlFor="first_name" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">First name</label>
-            <input type="text" id="first_name" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="John" required />
+            <label htmlFor="first_name" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Kerko</label>
+            <input type="text" id="first_name" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focs:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="produkti..." required />
           </div>
         </div>
       </form>
@@ -19,16 +19,16 @@ export const Products = () => {
           <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
             <tr>
               <th scope="col" className="px-6 py-3">
-                Product name
+                Emri
               </th>
               <th scope="col" className="px-6 py-3">
-                Color
+                Shifra
               </th>
               <th scope="col" className="px-6 py-3">
-                Category
+                Sasia
               </th>
               <th scope="col" className="px-6 py-3">
-                Price
+                Furnizuesi
               </th>
               <th scope="col" className="px-6 py-3">
                 Action
@@ -36,74 +36,25 @@ export const Products = () => {
             </tr>
           </thead>
           <tbody>
-            <tr className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
+            {data?.map(item => (
+              <tr key={item._id} className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
               <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                Apple MacBook Pro 17"
+                {item.name}
               </th>
               <td className="px-6 py-4">
-                Silver
+                {item.id}
               </td>
               <td className="px-6 py-4">
-                Laptop
+                {item.qty}
               </td>
               <td className="px-6 py-4">
-                $2999
+                {item.supplier}
               </td>
               <td className="px-6 py-4">
                 <a href="#" className="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
               </td>
             </tr>
-            <tr className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
-              <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                Microsoft Surface Pro
-              </th>
-              <td className="px-6 py-4">
-                White
-              </td>
-              <td className="px-6 py-4">
-                Laptop PC
-              </td>
-              <td className="px-6 py-4">
-                $1999
-              </td>
-              <td className="px-6 py-4">
-                <a href="#" className="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
-              </td>
-            </tr>
-            <tr className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
-              <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                Magic Mouse 2
-              </th>
-              <td className="px-6 py-4">
-                Black
-              </td>
-              <td className="px-6 py-4">
-                Accessories
-              </td>
-              <td className="px-6 py-4">
-                $99
-              </td>
-              <td className="px-6 py-4">
-                <a href="#" className="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
-              </td>
-            </tr>
-            <tr className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
-              <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                Google Pixel Phone
-              </th>
-              <td className="px-6 py-4">
-                Gray
-              </td>
-              <td className="px-6 py-4">
-                Phone
-              </td>
-              <td className="px-6 py-4">
-                $799
-              </td>
-              <td className="px-6 py-4">
-                <a href="#" className="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
-              </td>
-            </tr>
+            ))}            
           </tbody>
         </table>
       </div>
@@ -127,6 +78,7 @@ export const Products = () => {
           </button>
         </div>
       </div>
+
     </div>
   );
 }
