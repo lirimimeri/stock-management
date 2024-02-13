@@ -54,6 +54,7 @@ export class UserService implements UserRepository {
     const secretKey = this.configService.get<string>('JWT_SECRET') || 'khXC7OtDVwMJGpoolGio';
     const token = sign({ userId: user._id }, secretKey, { expiresIn: '4h' });
 
-    return { token };
+    delete user['password']; // remove password from response.
+    return { token, user };
   }
 }

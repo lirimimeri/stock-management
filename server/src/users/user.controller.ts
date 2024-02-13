@@ -2,7 +2,6 @@ import { Body, Controller, Get, Post, Request, UsePipes, ValidationPipe } from '
 
 import { UserService } from './user.service';
 import { UserDto } from './user.dto';
-import { Request as Req } from 'express';
 
 @Controller('users')
 export class UserController {
@@ -26,7 +25,6 @@ export class UserController {
   @Post('login')
   @UsePipes(ValidationPipe)
   async login(@Body() user: UserDto) {
-    console.log('trying to login!');
     return await this.userService.login(user);
   }
 }
