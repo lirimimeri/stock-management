@@ -2,7 +2,7 @@
 
 import { handleResponse, BASE_URL } from './handle-response';
 
-export const get = async <T>(endpoint: string, params?: Record<string, any>, token?: string): Promise<T> => {
+export const get = async <T>(endpoint: string, params?: Record<string, string>, token?: string): Promise<T> => {
   const url = new URL(`${BASE_URL}/${endpoint}`);
   if (params) {
     Object.keys(params).forEach((key) => url.searchParams.append(key, params[key]));

@@ -13,3 +13,10 @@ export interface ProductListItemResponseDto {
   supplier?: string;
   qty: number;
 }
+
+export interface ProductForm {
+  name: string;
+  id: string;
+  qty: number;
+  price: number;
+}

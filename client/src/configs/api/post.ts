@@ -1,6 +1,6 @@
 import { BASE_URL, handleResponse } from "./handle-response";
 
-export const post = async <T>(endpoint: string, data?: any, token?: string): Promise<T> => {
+export const post = async <T>(endpoint: string, data?: unknown, token?: string): Promise<T> => {
     const url = `${BASE_URL}/${endpoint}`;
 
     const headers: Record<string, string> = {

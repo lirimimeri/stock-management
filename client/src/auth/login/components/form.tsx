@@ -8,9 +8,10 @@ interface FormInputs {
 
 interface Props {
   onLogin: (data: FormInputs) => void;
+  isLoading: boolean;
 }
 
-const Form: React.FC<Props> = ({ onLogin }) => {
+const Form: React.FC<Props> = ({ onLogin, isLoading }) => {
   const { register, handleSubmit, formState: { errors } } = useForm<FormInputs>();
 
   const onSubmit: SubmitHandler<FormInputs> = (data) => {
@@ -26,6 +27,7 @@ const Form: React.FC<Props> = ({ onLogin }) => {
         <input
           type="email"
           id="email"
+          disabled={isLoading}
           {...register('email', {
             required: 'Email is required',
             pattern: {
@@ -45,6 +47,7 @@ const Form: React.FC<Props> = ({ onLogin }) => {
         <input
           type="password"
           id="password"
+          disabled={isLoading}
           {...register('password', {
             required: 'Password is required',
           })}
@@ -55,6 +58,7 @@ const Form: React.FC<Props> = ({ onLogin }) => {
       </div>
       <button
         type="submit"
+        disabled={isLoading}
         className="w-full bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600 focus:outline-none focus:ring focus:border-blue-300"
       >
         Login

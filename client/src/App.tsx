@@ -1,33 +1,42 @@
-import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
+import { useEffect, useState } from 'react';
 import { QueryClient, QueryClientProvider } from 'react-query';
 
+import { Routes } from './Routes';
+import { User, authContext } from './context/auth';
 import './index.css';
-import { Dashboard } from './dashboard';
-import { Login } from './auth/login';
+import { useNavigate } from 'react-router-dom';
 
 const queryClient = new QueryClient();
 
 function App() {
+  const [token, setToken] = useState<string | null>(null);
+  const [user, setUser] = useState<User | null>(null);
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    navigate('/login');
+  }, [])
+  
+
+  const login = (newToken: string, authenticatedUser?: User) => {
+    setToken(newToken);
+    if (authenticatedUser) setUser(authenticatedUser)
+  }
+
+  const logout = () => {
+    setToken(null);
+  }
+
   return (
-    <BrowserRouter>
+    <>
     <QueryClientProvider client={queryClient}>
-
-      <Routes>
-        <Route path="/login" element={<Login />} />
-        <Route path="/dashboard/*" element={<Dashboard />} />
-        <Route
-          index
-          element={<Navigate to="/login" replace />}
-        />
-        <Route
-          path='*'
-          element={<Navigate to="/dashboard" replace />}
-        />
-      </Routes>
+      <authContext.Provider value={{ login, logout, token, user }}>
+        <Routes />
+      </authContext.Provider>
     </QueryClientProvider>
-
-    </BrowserRouter>
+    </>
   )
 }
 
-export default App
+export default App;
