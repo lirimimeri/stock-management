@@ -2,38 +2,31 @@ version: '3'
 services:
 
   # NestJS App Service
-  app:
-    build:
-      context: .
-      dockerfile: Dockerfile
+  nestjs-app:
+    image: node:18
+    volumes:
+      - ./:/usr/src/app
+      - ./env.dev:/usr/src/app/env.dev
+    depends_on:
+      - mongodb
+    working_dir: /usr/src/app
+    logging:
+      driver: "json-file"
+      options: { "max-size": "1m", "max-file": "1" }
+    expose:
+      - 4000
     ports:
       - 4000:4000
-    depends_on:
-      - mongo
-    networks:
-      - nesjs-network
-    environment:
-      PORT: 4000
-      DATABASE_URI: mongodb://0.0.0.0:27017
-      DATABASE_NAME: stock-management
-    env_file:
-      - .env
+    command: npm run start:dev
 
   # MongoDB Service
-  mongo:
-    container_name: mongo
-    build: 
-      context: .
-      dockerfile: Dockerfile-mongo
-    # volumes:
-    # - ./data:/data/db
-    networks:
-      - nesjs-network
+  mongodb:
+    image: mongo:latest
+    restart: unless-stopped
     ports:
-    - '27017:27017'
+      - "27017:27017"  # Map MongoDB container port to host port
+    volumes:
+      - mongodb_data:/data/db
 
-
-networks:
-    nesjs-network:
-      driver: bridge
-
+volumes:
+  mongodb_data:

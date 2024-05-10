@@ -1,0 +1,52 @@
+<form [formGroup]="form" (ngSubmit)="send()" class="flex flex-col space-y-4 p-4">
+
+  <div class="w-full">
+    <mat-form-field appearance="fill">
+      <mat-label>Emri</mat-label>
+      <input matInput type="text" formControlName="name" required class="rounded-md border border-gray-300 p-2 focus:outline-none focus:ring-2 focus:ring-primary-500">
+      <mat-error>
+        Name is required
+      </mat-error>
+    </mat-form-field>
+  </div>
+
+  <div class="w-full">
+    <mat-form-field appearance="fill">
+      <mat-label>ID</mat-label>
+      <input matInput type="text" formControlName="sku" required class="rounded-md border border-gray-300 p-2 focus:outline-none focus:ring-2 focus:ring-primary-500">
+      <mat-error>
+        ID is required
+      </mat-error>
+    </mat-form-field>
+  </div>
+
+  <div class="w-full">
+    <mat-form-field appearance="fill">
+      <mat-label>Sasia</mat-label>
+      <input matInput type="number" formControlName="qty" required class="rounded-md border border-gray-300 p-2 focus:outline-none focus:ring-2 focus:ring-primary-500">
+      <mat-error>
+        Quantity is required
+      </mat-error>
+    </mat-form-field>
+  </div>
+
+  <div class="w-full">
+    <mat-form-field appearance="fill">
+      <mat-label>Cmimi</mat-label>
+      <input matInput type="number" formControlName="price" required class="rounded-md border border-gray-300 p-2 focus:outline-none focus:ring-2 focus:ring-primary-500">
+      <mat-error>
+        Price is required
+      </mat-error>
+    </mat-form-field>
+  </div>
+
+  <div class="w-full">
+    <mat-form-field appearance="fill">
+      <mat-label>Furnizuesi</mat-label>
+      <input matInput type="text" formControlName="supplier" class="rounded-md border border-gray-300 p-2 focus:outline-none focus:ring-2 focus:ring-primary-500">
+    </mat-form-field>
+  </div>
+
+  <button mat-raised-button color="primary" type="submit" class="w-full py-2 rounded-md bg-primary-500 hover:bg-primary-700 text-white font-bold" [disabled]="form.invalid">Dergo</button>
+
+</form>

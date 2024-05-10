@@ -1,0 +1,49 @@
+<h1>Produktet</h1>
+
+<ng-template #loading>
+  <mat-spinner [diameter]="100"></mat-spinner>
+</ng-template>
+
+
+<div class="my-4 w-full flex justify-between">
+  <mat-form-field appearance="outline" class="w-96">
+    <mat-label>Kerko</mat-label>
+    <input matInput placeholder="Emri..." #search>
+    <button mat-button matSuffix class="w-full h-full" (click)="searchClicked(search.value)">
+      <mat-icon>search</mat-icon>
+    </button>
+  </mat-form-field>
+
+  <button (click)="openCreateProductDialog()" color="primary" mat-flat-button>Krijo Produkt</button>
+</div>
+<table mat-table *ngIf="productsService.products$ | async as dataSource; else loading;" [dataSource]="dataSource"
+  class="mat-elevation-z8 demo-table">
+  <ng-container *ngFor="let column of productsService.tableColumns$ | async" [matColumnDef]="column.columnDef">
+    <th mat-header-cell *matHeaderCellDef>
+      {{ column.header }}
+    </th>
+    <td mat-cell *matCellDef="let row" [class.actions-cell]="column.columnDef === 'actions'">
+      <ng-container *ngIf="column.columnDef !== 'actions'; else actionsColumn">
+        {{ column.cell(row) }}
+      </ng-container>
+      <ng-template #actionsColumn>
+        <div class="flex justify-end">
+          <button mat-icon-button color="warn" matTooltip="Fshij">
+            <mat-icon>delete</mat-icon>
+          </button>
+          <button mat-icon-button color="primary" matTooltip="Ndrysho" (click)="openEditProductDialog(row)">
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button mat-icon-button color="primary" matTooltip="Shto ne dalje">
+            <mat-icon>add</mat-icon>
+          </button>
+        </div>
+      </ng-template>
+    </td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="displayedColumns$ | async"></tr>
+  <tr mat-row class="data-row" *matRowDef="let row; columns: displayedColumns$ | async;"></tr>
+</table>
+
+<mat-paginator [length]="productsService.totalRecords$ | async" (page)="productsService.getProducts('', $event.pageIndex)" [pageSize]="20" [pageIndex]="fg.value.page || 0"></mat-paginator>

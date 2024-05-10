@@ -1,0 +1,36 @@
+<ng-template #loader>
+    <div class="flex justify-end">
+        <mat-spinner [diameter]="30" />
+    </div>
+</ng-template>
+
+<mat-card class="p-3">
+    <mat-card-content>
+        <form [formGroup]="fg">
+            <div *ngIf="authService.error$ | async as error"
+                class="my-4 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+                <span class="block sm:inline">{{ error }}</span>
+            </div>
+            <mat-form-field appearance="outline">
+                <mat-label>Email</mat-label>
+                <input type="text" matInput placeholder="Username" [formControl]="cEmail" />
+
+                <mat-error *ngIf="cEmail.hasError('required')">Fusha eshte e nevojshme*</mat-error>
+                <mat-error *ngIf="cEmail.hasError('email')">Fusha duhet te jete e formatit email</mat-error>
+            </mat-form-field>
+
+
+            <mat-form-field appearance="outline">
+                <mat-label>Password</mat-label>
+                <input type="password" matInput placeholder="Password" [formControl]="cPassword" />
+                <mat-error *ngIf="cPassword.hasError('required')">Fusha eshte e nevojshme</mat-error>
+                <mat-error *ngIf="cPassword.hasError('minlength')">Fusha duhet te kete me shume se 6
+                    karaktere</mat-error>
+            </mat-form-field>
+
+            <div class="flex justify-end" *ngIf="(authService.loading$ | async ) === false; else loader">
+                <button mat-flat-button color="primary" (click)="send()">Login</button>
+            </div>
+        </form>
+    </mat-card-content>
+</mat-card>

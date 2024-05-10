@@ -1,4 +1,8 @@
-import { Injectable, BadRequestException, UnauthorizedException } from '@nestjs/common';
+import {
+  Injectable,
+  BadRequestException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { sign } from 'jsonwebtoken';
 
 import { MongodbService } from '../utils/services/mongodb.service';
@@ -11,10 +15,10 @@ import { ConfigService } from '@nestjs/config';
 @Injectable()
 export class UserService implements UserRepository {
   constructor(
-    private readonly dbService: MongodbService, 
+    private readonly dbService: MongodbService,
     private readonly passwordService: AuthService,
-    private readonly configService: ConfigService
-  ) { }
+    private readonly configService: ConfigService,
+  ) {}
 
   async getAll() {
     const db = await this.dbService.getMongodb();
@@ -24,37 +28,68 @@ export class UserService implements UserRepository {
   async create(user: UserDto) {
     const db = await this.dbService.getMongodb();
 
-    const userExists = await db.collection('users').findOne({ email: user.email });
+    const userExists = await db
+      .collection('users')
+      .findOne({ email: user.email });
     if (userExists)
-      throw new BadRequestException({ msg: 'User with that email already exists!' });
+      throw new BadRequestException({
+        msg: 'User with that email already exists!',
+      });
 
-    const hashedPassword = await this.passwordService.hashPassword(user.password);
+    const hashedPassword = await this.passwordService.hashPassword(
+      user.password,
+    );
     user.password = hashedPassword;
 
     const userToInsert = {
       ...user,
       createdAt: new Date(),
-      isActive: true
-    }
+      isActive: true,
+    };
 
     return await db.collection('users').insertOne(userToInsert);
   }
 
   async login(userDto: UserDto) {
     const db = await this.dbService.getMongodb();
-    
-    const user = await db.collection<UserCollection>('users').findOne({ email: userDto.email });
-    if (!user)
-      throw new UnauthorizedException({ msg: 'Unauthorized!' });
 
-    const isPasswordValid = await this.passwordService.verifyPassword(user.password, userDto.password);
+    const user = await db
+      .collection<UserCollection>('users')
+      .findOne({ email: userDto.email });
+    if (!user) throw new UnauthorizedException({ msg: 'Unauthorized!' });
+
+    const isPasswordValid = await this.passwordService.verifyPassword(
+      user.password,
+      userDto.password,
+    );
+
     if (!isPasswordValid)
       throw new UnauthorizedException({ msg: 'Unauthorized!' });
-  
-    const secretKey = this.configService.get<string>('JWT_SECRET') || 'khXC7OtDVwMJGpoolGio';
+
+    const secretKey =
+      this.configService.get<string>('JWT_SECRET') || 'khXC7OtDVwMJGpoolGio';
     const token = sign({ userId: user._id }, secretKey, { expiresIn: '4h' });
 
     delete user['password']; // remove password from response.
     return { token, user };
+  }
+
+  async createDefaultUser() {
+    const db = await this.dbService.getMongodb();
+
+    const user = await db
+      .collection('users')
+      .findOne({ email: process.env.DEFAULT_USER || '' });
+    if (user) {
+      console.log('Default user exists!');
+      return;
+    }
+
+    await this.create({
+      email: process.env.DEFAULT_USER,
+      password: process.env.DEFAULT_USER_PASSWORD,
+    });
+
+    console.log('Default user created!');
   }
 }

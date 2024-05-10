@@ -1,0 +1,24 @@
+<mat-toolbar color="primary">
+    <button mat-icon-button (click)="dashboardService.toggleSidebar()">
+        <mat-icon>menu</mat-icon>
+    </button>
+    <div class="flex justify-between w-full">
+        <span class="ml-12">Market</span>
+        <button mat-flat-button color="accent" (click)="authService.logout()">Dilni</button>
+    </div>
+</mat-toolbar>
+
+<mat-sidenav-container [autosize]="true">
+    <mat-sidenav class="!w-80 !h-[100vh]" [opened]="dashboardService.isOpen$ | async" (closed)="dashboardService.isOpen$.next(false)">
+        <mat-toolbar>Sidebar</mat-toolbar>
+        <mat-nav-list>
+            <a mat-list-item routerLink="/home">Home</a>
+            <a mat-list-item routerLink="/about">About</a>
+            <a mat-list-item (click)="authService.logout()">Logout</a>
+        </mat-nav-list>
+    </mat-sidenav>
+
+    <mat-sidenav-content class="p-10 !h-[calc(100vh-100px)]">
+        <router-outlet />
+    </mat-sidenav-content>
+</mat-sidenav-container>
